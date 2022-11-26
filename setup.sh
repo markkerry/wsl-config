@@ -2,8 +2,8 @@
 
 # Description:  This script will configure Ubuntu in WSL
 # Written by:   Mark kerry
-# Date:         18/11/2022
-# Version:      1.0
+# Date:         26/11/2022
+# Version:      1.1
 # Comment:      This version is designed to be able to handle being run multiple times
 #               if there was a problem with the initial setup.
 
@@ -26,7 +26,13 @@ cat << EOF >> .bashrc
 cd ~
 
 # Auto patch on start
+echo 'Checking apt for updates. Press Ctrl + C to cancel.'
 sudo apt update && sudo apt upgrade -y
+
+clear
+
+# Set kubectl to k
+alias k='kubectl'
 
 EOF
 }
@@ -44,7 +50,7 @@ setDockerStartAuto() {
 echo 'Creating a .hushlogin in ~'
 if [ -f ~/.hushlogin ]
 then
-    echo '.hushlogin already exists in ~'
+    echo '.hushlogin already exists in home dir'
 else
     touch ~/.hushlogin
 fi
@@ -57,6 +63,15 @@ else
     echo 'Editing .bashrc file'
     cp ~/.bashrc ~/.bashrc.bak
     configureBashrc
+fi
+
+# download .vimrc
+echo 'Creating a .vimrc in ~'
+if [ -f ~/.vimrc ]
+then
+    echo '.vimrc already exists in home dir'
+else
+    curl https://raw.githubusercontent.com/markkerry/wsl-config/main/.vimrc -o .vimrc
 fi
 
 echo 'Installing updates for Ubuntu'
@@ -100,4 +115,11 @@ echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO 
 sudo apt-get update
 sudo apt-get install azure-cli -y
 
-echo 'Restart Ubuntu to use Docker'
+# Install kubectl
+echo 'Installing kubectl'
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt update
+sudo apt install -y kubectl
+
+echo 'Script complete. Restart Ubuntu to use Docker'
