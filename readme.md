@@ -18,44 +18,29 @@ It automates the the following:
 
 ## Installing WSL and Ubuntu
 
-1. Run the following command to install WSL and Ubuntu 20.04 LTS
+Run the following command to install WSL and Ubuntu 20.04 LTS. When complete reboot your machine.
 
 ```cmd
 wsl --install -d Ubuntu-20.04
 ```
 
-2. Reboot the laptop
-3. Open WSL. You will be prompted to create you Unix username and password.
+Once logged back in, oOpen WSL. You will be prompted to create you Unix username and password.
 
 ## Configure Ubuntu
 
-1. To copy the script the home directory. From Ubuntu type the following:
+To download and run the script, run the following from your terminal:
 
 ```bash
 cd ~
-curl https://raw.githubusercontent.com/markkerry/wsl-config/main/setup.sh -o setup.sh
-```
-
-2. Back in Ubuntu, change the ownership of the bash script to make it executable.
-
-```bash
-sudo chmod +x ./setup.sh
-```
-
-> NOTE: If you edit the script on Windows and the encoding changes, you can change it back to run on Linux again as follows: `sed -i -e 's/\r$//' ./setup.sh`
-
-3. Finally, run the bash script
-
-```bash
-./setup.sh
+wget -q https://raw.githubusercontent.com/markkerry/wsl-config/main/setup.sh -O - | /bin/bash
 ```
 
 ## Remove Ubuntu
 
-1. If you want to re-install Ubuntu in WSL you can remove it as follows:
+If you want to re-install Ubuntu in WSL you can remove it as follows:
 
 ```bash
 wsl --unregister Ubuntu-20.04
 ```
 
-2. And then re-install it using the command above
+And then re-install it using the command above.
